@@ -4,135 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
-    using System.Text;
     using System.Xml;
-
-    class PartialHTTPStream : Stream, IDisposable
-    {
-        Stream stream;
-        WebResponse resp;
-        HttpWebRequest req;
-        long cacheRemaining = 0;
-        const long cachelen = 1024;
-
-        public string Url { get; private set; }
-        public override bool CanRead { get { return true; } }
-        public override bool CanWrite { get { return false; } }
-        public override bool CanSeek { get { return true; } }
-
-        long position = 0;
-        public override long Position
-        {
-            get { return position; }
-            set
-            {
-                long delta = value - position;
-                if (delta == 0)
-                    return;
-                if (delta > 0 && delta < cacheRemaining)
-                {
-                    Console.WriteLine("Seeking in cache");
-                    byte[] dummy = new byte[delta];
-                    cacheRemaining -= (int)delta;
-                    while (delta > 0)
-                    {
-                        int nread = stream.Read(dummy, 0, (int)delta);
-                        if (nread == 0) throw new IOException();
-                        delta -= nread;
-                    }
-                }
-                else cacheRemaining = 0;
-                position = value;
-                Console.WriteLine("Seek {0}", value);
-            }
-        }
-
-        long? length;
-        public override long Length
-        {
-            get
-            {
-                if (length == null)
-                {
-                    Cancel();
-                    req = HttpWebRequest.CreateHttp(Url);
-                    req.Method = "HEAD";
-                    length = req.GetResponse().ContentLength;
-                }
-                return length.Value;
-            }
-        }
-
-        public PartialHTTPStream(string Url) { this.Url = Url; }
-
-        public override void SetLength(long value)
-        { throw new NotImplementedException(); }
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            if (cacheRemaining <= 0)
-            {
-                Cancel();
-                req = HttpWebRequest.CreateHttp(Url);
-                cacheRemaining = Math.Min(Length - Position, Math.Max((long)count, cachelen));
-                Console.WriteLine("Cache miss - reading {0} @ {1}", cacheRemaining, Position);
-                req.AddRange(Position, Position + cacheRemaining - 1);
-                resp = req.GetResponse();
-                stream = resp.GetResponseStream();
-            }
-
-            long newcount = Math.Min(buffer.Length - offset, Math.Min(cacheRemaining, count));
-            int nread = stream.Read(buffer, (int)offset, (int)newcount);
-            position += nread;
-            cacheRemaining -= nread;
-            return nread;
-        }
-
-        public override void Write(byte[] buffer, int offset, int count)
-        { throw new NotImplementedException(); }
-
-        public override long Seek(long pos, SeekOrigin origin)
-        {
-            switch (origin)
-            {
-                case SeekOrigin.End:
-                    return Position = Length + pos;
-                case SeekOrigin.Begin:
-                    return Position = pos;
-                case SeekOrigin.Current:
-                    return Position += pos;
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public override void Flush() { }
-
-        void Cancel()
-        {
-            if (req != null)
-            {
-                req.Abort();
-                req = null;
-            }
-            if (resp != null)
-            {
-                resp.Dispose();
-                resp = null;
-            }
-            if (stream != null)
-            {
-                stream.Dispose();
-                stream = null;
-            }
-        }
-
-        new void Dispose()
-        {
-            base.Dispose();
-            Cancel();
-        }
-    }
 
     class TopHat
     {
@@ -148,11 +20,16 @@
             Dictionary<string, double> parmdict)
         {
             /*
-        	{[Latitude of natural origin, 0]}	System
-        	{[Longitude of natural origin, -93]}	Sy
-        	{[Scale factor at natural origin, 0.9996]}
-        	{[False easting, 500000]}	System.Collect
-        	{[False northing, 0]}	System.Collections
+            Latitude of natural origin, 0  	       -> /
+            Longitude of natural origin, -93  	   -> lon0
+            Scale factor at natural origin, 0.9996 -> k0
+            False easting, 500000  	               -> feast
+            False northing, 0  	                   -> fnorth
+            Semi-major axis, 6378206.4  	       -> a
+            Flattening ratio, 294.978698213898     -> f
+             
+            There is a constant scale (50000) and constant w-e and s-n distances.
+            
             */
         }
 
@@ -182,6 +59,12 @@
             return nsman;
         }
 
+        static XmlNamespaceManager LoadXlink(string codespace, XmlNode parentnode, XmlNamespaceManager parentns, string gmlnode, out XmlDocument childdoc)
+        {
+            string link = parentnode.SelectSingleNode(string.Format("gml:{0}/@xlink:href", gmlnode), parentns).Value;
+            return LoadEPSG(codespace, link, out childdoc);
+        }
+
         static void GetCRS(string codespace, string code, Dictionary<string, double> parmdict)
         {
             XmlDocument proj;
@@ -191,20 +74,41 @@
             if (projroot == null)
                 return;
 
-            XmlNode convlink = projroot.SelectSingleNode("gml:conversion/@xlink:href", projns);
             XmlDocument conv;
-            XmlNamespaceManager convns = LoadEPSG(codespace, convlink.Value, out conv);
+            XmlNamespaceManager convns = LoadXlink(codespace, projroot, projns, "conversion", out conv);
 
             foreach (XmlNode param in conv.DocumentElement.SelectNodes("gml:parameterValue/gml:ParameterValue", convns))
             {
                 double value = double.Parse(param.SelectSingleNode("gml:value/text()", convns).Value);
                 
-                string parmlink = param.SelectSingleNode("gml:operationParameter/@xlink:href", convns).Value;
                 XmlDocument parm;
-                XmlNamespaceManager parmns = LoadEPSG(codespace, parmlink, out parm);
+                XmlNamespaceManager parmns = LoadXlink(codespace, param, convns, "operationParameter", out parm);
                 string parmname = parm.DocumentElement.SelectSingleNode("//gml:name/text()", parmns).Value;
+
                 parmdict[parmname] = value;
             }
+
+            XmlDocument geocrs;
+            XmlNamespaceManager geocrsns = LoadXlink(codespace, projroot, projns, "baseGeodeticCRS", out geocrs);
+            XmlDocument datum;
+            XmlNamespaceManager datumns = LoadXlink(codespace, geocrs.DocumentElement, geocrsns, "geodeticDatum", out datum);
+            XmlDocument ellipsoid;
+            XmlNamespaceManager ellns = LoadXlink(codespace, datum.DocumentElement, datumns, "ellipsoid", out ellipsoid);
+
+            double
+                smaj = double.Parse(ellipsoid.SelectSingleNode("//gml:semiMajorAxis/text()", ellns).Value),
+                f;
+            XmlNode fnode = ellipsoid.SelectSingleNode("//gml:inverseFlattening/text()", ellns);
+
+            if (fnode == null)
+            {
+                double smin = double.Parse(ellipsoid.SelectSingleNode("//gml:semiMinorAxis/text()", ellns).Value);
+                f = smaj / (smaj - smin);
+            }
+            else f = double.Parse(fnode.Value);
+
+            parmdict["Semi-major axis"] = smaj;
+            parmdict["Flattening ratio"] = f;
         }
 
         static void Search(
