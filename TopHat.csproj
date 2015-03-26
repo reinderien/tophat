@@ -41,7 +41,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapTree.cs" />
+    <Compile Include="QuadTree.cs" />
     <Compile Include="TopHat.cs" />
   </ItemGroup>
   <ItemGroup>

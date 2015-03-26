@@ -12,33 +12,61 @@
         public double sizemb;
     }
 
+    class Map
+    {
+        /*
+        Latitude of natural origin, 0  	       -> /
+        Longitude of natural origin, -93  	   -> lon0
+        Scale factor at natural origin, 0.9996 -> k0
+        False easting, 500000  	               -> feast
+        False northing, 0  	                   -> fnorth
+        Semi-major axis, 6378206.4  	       -> a
+        Flattening ratio, 294.978698213898     -> f
+             
+        There is not a constant scale or cnostant w-e n-s distances. Things overlap.
+        */
+        public string title;
+        public int scale;
+        public double pw;
+        public double pe;
+        public double ps;
+        public double pn;
+        public Dictionary<string, double> parms;
+        public List<MapLink> links;
+
+        public void DumpJson(TextWriter writer)
+        {
+            writer.Write('{');
+
+            writer.Write("w:{0},e:{1},s:{2},n:{3},scale:{4},title:\"{5}\",",
+                pw, pe, ps, pn, scale, title);
+
+            writer.Write("lon0:{0},", parms["Longitude of natural origin"]);
+            writer.Write("k0:{0},", parms["Scale factor at natural origin"]);
+            writer.Write("feast:{0},", parms["False easting"]);
+            writer.Write("fnorth:{0},", parms["False northing"]);
+            writer.Write("a:{0},", parms["Semi-major axis"]);
+            writer.Write("f:{0},", parms["Flattening ratio"]);
+
+            writer.Write("links:[");
+            foreach (MapLink link in links)
+            {
+                writer.Write('{');
+                writer.Write("name:\"{0}\",href:\"{1}\",sizemb:{2}",
+                    link.name, link.href, link.sizemb);
+                writer.Write('}');
+            }
+            writer.Write(']');
+
+            writer.Write('}');
+        }
+    }
+
     class TopHat
     {
         static Dictionary<Uri, string> HTTPCache = new Dictionary<Uri, string>();
 
-        static void AddMap(
-            string title,
-            int scale,
-            double pw,
-            double pe,
-            double ps,
-            double pn,
-            Dictionary<string, double> parmdict,
-            List<MapLink> links)
-        {
-            /*
-            Latitude of natural origin, 0  	       -> /
-            Longitude of natural origin, -93  	   -> lon0
-            Scale factor at natural origin, 0.9996 -> k0
-            False easting, 500000  	               -> feast
-            False northing, 0  	                   -> fnorth
-            Semi-major axis, 6378206.4  	       -> a
-            Flattening ratio, 294.978698213898     -> f
-             
-            There is not a constant scale or cnostant w-e n-s distances. Things overlap.
-            
-            */
-        }
+        static QuadTree tree = new QuadTree();
 
         static XmlNamespaceManager LoadEPSG(string codespace, string code, out XmlDocument doc)
         {
@@ -87,7 +115,7 @@
             foreach (XmlNode param in conv.DocumentElement.SelectNodes("gml:parameterValue/gml:ParameterValue", convns))
             {
                 double value = double.Parse(param.SelectSingleNode("gml:value/text()", convns).Value);
-                
+
                 XmlDocument parm;
                 XmlNamespaceManager parmns = LoadXlink(codespace, param, convns, "operationParameter", out parm);
                 string parmname = parm.DocumentElement.SelectSingleNode("//gml:name/text()", parmns).Value;
@@ -173,8 +201,10 @@
                     string url = opts.SelectSingleNode(".//gmd:URL/text()", nsman).Value;
                     if (!url.StartsWith("http")) continue;
 
-                    string name = opts.SelectSingleNode(".//gmd:name/gco:CharacterString/text()", nsman).Value;
                     double sizemb = double.Parse(opts.SelectSingleNode("./gmd:transferSize/gco:Real/text()", nsman).Value);
+                    if (sizemb < 2) continue;
+
+                    string name = opts.SelectSingleNode(".//gmd:name/gco:CharacterString/text()", nsman).Value;
                     links.Add(new MapLink()
                         {
                             name = name,
@@ -183,21 +213,24 @@
                         });
                 }
 
-                AddMap(
-                    title.Value,
-                    int.Parse(scale.Value),
-                    double.Parse(bw.Value),
-                    double.Parse(be.Value),
-                    double.Parse(bs.Value),
-                    double.Parse(bn.Value),
-                    parmdict,
-                    links);
+                tree.Add(new Map()
+                {
+                    title = title.Value,
+                    scale = int.Parse(scale.Value),
+                    pw = double.Parse(bw.Value),
+                    pe = double.Parse(be.Value),
+                    ps = double.Parse(bs.Value),
+                    pn = double.Parse(bn.Value),
+                    parms = parmdict,
+                    links = links
+                });
             }
         }
 
         static void Main()
         {
             Search(-90.1, -88.9, 47.9, 49.1);
+            tree.JsonDump(Console.Out);
 
             /*
             Form an index tree for geographical coordinates
