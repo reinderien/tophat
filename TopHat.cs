@@ -6,6 +6,12 @@
     using System.Net;
     using System.Xml;
 
+    class MapLink
+    {
+        public string name, href;
+        public double sizemb;
+    }
+
     class TopHat
     {
         static Dictionary<Uri, string> HTTPCache = new Dictionary<Uri, string>();
@@ -17,7 +23,8 @@
             double pe,
             double ps,
             double pn,
-            Dictionary<string, double> parmdict)
+            Dictionary<string, double> parmdict,
+            List<MapLink> links)
         {
             /*
             Latitude of natural origin, 0  	       -> /
@@ -28,7 +35,7 @@
             Semi-major axis, 6378206.4  	       -> a
             Flattening ratio, 294.978698213898     -> f
              
-            There is a constant scale (50000) and constant w-e and s-n distances.
+            There is not a constant scale or cnostant w-e n-s distances. Things overlap.
             
             */
         }
@@ -142,21 +149,38 @@
             foreach (XmlNode entry in doc.DocumentElement.SelectNodes("atom:entry", nsman))
             {
                 XmlNode
-                    title = entry.SelectSingleNode("atom:title/text()", nsman),
-                    bw = entry.SelectSingleNode("//gmd:westBoundLongitude/gco:Decimal/text()", nsman),
-                    be = entry.SelectSingleNode("//gmd:eastBoundLongitude/gco:Decimal/text()", nsman),
-                    bs = entry.SelectSingleNode("//gmd:southBoundLatitude/gco:Decimal/text()", nsman),
-                    bn = entry.SelectSingleNode("//gmd:northBoundLatitude/gco:Decimal/text()", nsman),
-                    scale = entry.SelectSingleNode("//gmd:spatialResolution//gmd:denominator/gco:Integer/text()", nsman);
+                    title = entry.SelectSingleNode("./atom:title/text()", nsman),
+                    bw = entry.SelectSingleNode(".//gmd:westBoundLongitude/gco:Decimal/text()", nsman),
+                    be = entry.SelectSingleNode(".//gmd:eastBoundLongitude/gco:Decimal/text()", nsman),
+                    bs = entry.SelectSingleNode(".//gmd:southBoundLatitude/gco:Decimal/text()", nsman),
+                    bn = entry.SelectSingleNode(".//gmd:northBoundLatitude/gco:Decimal/text()", nsman),
+                    scale = entry.SelectSingleNode(".//gmd:spatialResolution//gmd:denominator/gco:Integer/text()", nsman);
 
-                XmlNodeList refsystems = entry.SelectNodes("//gmd:RS_Identifier", nsman);
+                XmlNodeList refsystems = entry.SelectNodes(".//gmd:RS_Identifier", nsman);
                 Dictionary<string, double> parmdict = new Dictionary<string, double>();
                 foreach (XmlNode refsystem in refsystems)
                 {
                     XmlNode
-                        codespace = refsystem.SelectSingleNode("gmd:codeSpace/gco:CharacterString/text()", nsman),
-                        code = refsystem.SelectSingleNode("gmd:code/gco:CharacterString/text()", nsman);
+                        codespace = refsystem.SelectSingleNode("./gmd:codeSpace/gco:CharacterString/text()", nsman),
+                        code = refsystem.SelectSingleNode("./gmd:code/gco:CharacterString/text()", nsman);
                     GetCRS(codespace.Value, code.Value, parmdict);
+                }
+
+                List<MapLink> links = new List<MapLink>();
+                foreach (XmlNode opts in entry.SelectNodes(
+                    ".//gmd:MD_DigitalTransferOptions", nsman))
+                {
+                    string url = opts.SelectSingleNode(".//gmd:URL/text()", nsman).Value;
+                    if (!url.StartsWith("http")) continue;
+
+                    string name = opts.SelectSingleNode(".//gmd:name/gco:CharacterString/text()", nsman).Value;
+                    double sizemb = double.Parse(opts.SelectSingleNode("./gmd:transferSize/gco:Real/text()", nsman).Value);
+                    links.Add(new MapLink()
+                        {
+                            name = name,
+                            href = url,
+                            sizemb = sizemb
+                        });
                 }
 
                 AddMap(
@@ -166,7 +190,8 @@
                     double.Parse(be.Value),
                     double.Parse(bs.Value),
                     double.Parse(bn.Value),
-                    parmdict);
+                    parmdict,
+                    links);
             }
         }
 
