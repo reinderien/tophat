@@ -705,141 +705,122 @@ $(document).ready(function() {
 
 
 
-    var utmfmt = function(x) {
+    var db = {w:-94,e:-86,s:47.75,n:51.75,x:-90,y:49.75,maps:[{w:-90,e:-88,s:49,n:50,scale:250000,title:"CanMatrix - Print Ready - 052H - Nipigon, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/h/canmatrix2_052h_pdf.zip",sizemb:11.921742},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/h/canmatrix2_052h_tif.zip",sizemb:10.294106},]},{w:-92,e:-90,s:49,n:50,scale:
+    250000,title:"CanMatrix - Print Ready - 052G - Ignace, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/g/canmatrix2_052g_pdf.zip",sizemb:
+    21.045016},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/g/canmatrix2_052g_tif.zip",sizemb:18.473459},]},],sw:{w:-94,e:-90,s:47.75,n:49.75,x:-92,y:48.75,maps:[{w:-92,e:-90,s:48,n:49,scale:250000,title:
+    "CanMatrix - Print Ready -052B - Quetico, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/b/canmatrix2_052b_pdf.zip",sizemb:19.504585},{name:
+    "TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/b/canmatrix2_052b_tif.zip",sizemb:18.509969},]},],se:{w:-92,e:-90,s:47.75,n:48.75,x:-91,y:48.25,maps:[],se:{w:-91,e:-90,s:47.75,n:48.25,x:-90.5,y:48,maps:[],ne:{w:-90.5,e:-90,s:48,
+    n:48.25,x:-90.25,y:48.125,maps:[{w:-90.5,e:-90,s:48,n:48.25,scale:50000,title:"CanMatrix - Print Ready - 052B01 - Arrow lake, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b01_pdf.zip",sizemb:21.506553},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b01_tif.zip",sizemb:20.738256},]},],}},ne:{w:-91,e:-90,
+    s:48.25,n:48.75,x:-90.5,y:48.5,maps:[],se:{w:-90.5,e:-90,s:48.25,n:48.5,x:-90.25,y:48.375,maps:[{w:-90.5,e:-90,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052B08 - Marks lake, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378137,
+    f:298.257222101,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b08_pdf.zip",sizemb:13.996696},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b08_tif.zip",
+    sizemb:12.031986},]},],},ne:{w:-90.5,e:-90,s:48.5,n:48.75,x:-90.25,y:48.625,maps:[{w:-90.5,e:-90,s:48.5,n:48.75,scale:50000,title:"CanMatrix - PrintReady - 052B09 - Shebandowan, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,
+    f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b09_pdf.zip",sizemb:23.088194},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b09_tif.zip",
+    sizemb:23.230966},]},],}}},ne:{w:-92,e:-90,s:48.75,n:49.75,x:-91,y:49.25,maps:[],se:{w:-91,e:-90,s:48.75,n:49.25,x:-90.5,y:49,maps:[],se:{w:-90.5,e:-90,s:48.75,n:49,x:-90.25,y:48.875,maps:[{w:-90.5,e:-90,s:48.75,n:49,scale:50000,title:
+    "CanMatrix - Print Ready - 052B16 - Savanne, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b16_pdf.zip",sizemb:13.922054},
+    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b16_tif.zip",sizemb:12.535679},]},],},ne:{w:-90.5,e:-90,s:49,n:49.25,x:-90.25,y:49.125,maps:[{w:-90.5,e:-90,s:49,n:49.25,scale:50000,title:
+    "CanMatrix - Print Ready - 052G01 - Upsala, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/g/canmatrix2_052g01_pdf.zip",sizemb:11.067636},
+    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/g/canmatrix2_052g01_tif.zip",sizemb:9.092106},]},],}},}},se:{w:-90,e:-86,s:47.75,n:49.75,x:-88,y:48.75,maps:[{w:-90,e:-88,s:48,n:49,scale:250000,
+    title:"CanMatrix - Print Ready - 052A - Thunder bay, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/a/canmatrix2_052a_pdf.zip",sizemb:12.965186},
+    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/a/canmatrix2_052a_tif.zip",sizemb:11.921257},]},],sw:{w:-90,e:-88,s:47.75,n:48.75,x:-89,y:48.25,maps:[],sw:{w:-90,e:-89,s:47.75,n:48.25,x:-89.5,y:48,maps:[],nw:{w:-90,e:-89.5,s:48,
+    n:48.25,x:-89.75,y:48.125,maps:[{w:-90,e:-89.5,s:48,n:48.25,scale:50000,title:"CanMatrix - Print Ready - 052A04 - Pigeon river, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a04_pdf.zip",sizemb:14.555276},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a04_tif.zip",sizemb:11.828886},]},],},ne:{w:-89.5,e:-89,s:48,
+    n:48.25,x:-89.25,y:48.125,maps:[{w:-89.5,e:-89,s:48,n:48.25,scale:50000,title:"CanMatrix - Print Ready - 052A03 - Jarvis river, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a03_pdf.zip",sizemb:9.790411},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a03_tif.zip",sizemb:8.047039},]},],}},nw:{w:-90,e:-89,s:48.25,
+    n:48.75,x:-89.5,y:48.5,maps:[],sw:{w:-90,e:-89.5,s:48.25,n:48.5,x:-89.75,y:48.375,maps:[{w:-90,e:-89.5,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052A05 - Kakabeka falls, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,
+    f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a05_pdf.zip",sizemb:19.97129},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a05_tif.zip",
+    sizemb:19.171035},]},],},se:{w:-89.5,e:-89,s:48.25,n:48.5,x:-89.25,y:48.375,maps:[{w:-89.5,e:-89,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052A06 - Thunder bay, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,
+    links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a06_pdf.zip",sizemb:11.368634},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a06_tif.zip",sizemb:9.743339},]},],},
+    nw:{w:-90,e:-89.5,s:48.5,n:48.75,x:-89.75,y:48.625,maps:[{w:-90,e:-89.5,s:48.5,n:48.75,scale:50000,title:"CanMatrix - Print Ready - 052A12 - Sunshine, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",
+    href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a12_pdf.zip",sizemb:21.27199},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a12_tif.zip",sizemb:20.880413},]},],},ne:{w:-89.5,e:-89,
+    s:48.5,n:48.75,x:-89.25,y:48.625,maps:[{w:-89.5,e:-89,s:48.5,n:48.75,scale:50000,title:"CanMatrix - Print Ready - 052A11 - Onion lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a11_pdf.zip",sizemb:19.824705},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a11_tif.zip",sizemb:17.350397},]},],}},ne:{w:-89,e:-88,
+    s:48.25,n:48.75,x:-88.5,y:48.5,maps:[],sw:{w:-89,e:-88.5,s:48.25,n:48.5,x:-88.75,y:48.375,maps:[{w:-89,e:-88.5,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052A07 - Thunder cape, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,
+    f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a07_pdf.zip",sizemb:11.709188},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a07_tif.zip",
+    sizemb:11.301776},]},],},nw:{w:-89,e:-88.5,s:48.5,n:48.75,x:-88.75,y:48.625,maps:[{w:-89,e:-88.5,s:48.5,n:48.75,scale:50000,title:"CanMatrix - Print Ready - 052A10 - Loon, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,
+    links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a10_pdf.zip",sizemb:17.058366},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a10_tif.zip",
+    sizemb:16.140093},]},],},}},nw:{w:-90,e:-88,s:48.75,n:49.75,x:-89,y:49.25,maps:[],sw:{w:-90,e:-89,s:48.75,n:49.25,x:-89.5,y:49,maps:[],sw:{w:-90,e:-89.5,s:48.75,n:49,x:-89.75,y:48.875,maps:[{w:-90,e:-89.5,s:48.75,n:49,scale:50000,title:
+    "CanMatrix - Print Ready - 052A13 - Raith, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a13_pdf.zip",sizemb:16.204415},
+    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a13_tif.zip",sizemb:14.682926},]},],},se:{w:-89.5,e:-89,s:48.75,n:49,x:-89.25,y:48.875,maps:[{w:-89.5,e:-89,s:48.75,n:49,scale:50000,title:
+    "CanMatrix - Print Ready - 052A14 - East bay, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a14_pdf.zip",sizemb:12.913035},
+    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a14_tif.zip",sizemb:10.861987},]},],},nw:{w:-90,e:-89.5,s:49,n:49.25,x:-89.75,y:49.125,maps:[{w:-90,e:-89.5,s:49,n:49.25,scale:50000,title:
+    "CanMatrix - Print Ready - 052H04 - Lac des iles, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/h/canmatrix2_052h04_pdf.zip",sizemb:
+    13.303807},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/h/canmatrix2_052h04_tif.zip",sizemb:11.407501},]},],},ne:{w:-89.5,e:-89,s:49,n:49.25,x:-89.25,y:49.125,maps:[{w:-89.5,e:-89,s:49,n:49.25,scale:50000,title:
+    "CanMatrix - Print Ready - 052H03 - Eaglehead lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/h/canmatrix2_052h03_pdf.zip",
+    sizemb:15.77037},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/h/canmatrix2_052h03_tif.zip",sizemb:13.840294},]},],}},se:{w:-89,e:-88,s:48.75,n:49.25,x:-88.5,y:49,maps:[],sw:{w:-89,e:-88.5,s:48.75,n:49,x:-88.75,y:48.875,maps:
+    [{w:-89,e:-88.5,s:48.75,n:49,scale:50000,title:"CanMatrix - Print Ready - 052A15 - Greenwich lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a15_pdf.zip",sizemb:13.992883},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a15_tif.zip",sizemb:12.072877},]},],},nw:{w:-89,e:-88.5,s:49,
+    n:49.25,x:-88.75,y:49.125,maps:[{w:-89,e:-88.5,s:49,n:49.25,scale:50000,title:"CanMatrix - Print Ready - 052H02 - Shillabeer lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
+    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/h/canmatrix2_052h02_pdf.zip",sizemb:15.248446},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/h/canmatrix2_052h02_tif.zip",sizemb:13.481669},]},],},},},},}
+
+
+
+        utmfmt = function (x) {
             return '(' + Math.floor(x / 1e5) + ')' +
                    (1e9 + Math.floor(x) + '').slice(-5)
         },
     
-        lng=null, lat=null,
-        mapcache = {},
-        setinfo = function() {
+        setinfo = function(lng, lat, usedmaps) {
             var content = 'Geographic: ' +
-                          lng.toFixed(6) + '°,' + lat.toFixed(6) + '°<br/>',
-                result = false
-            for (var id in mapcache) {
-                var cache = mapcache[id]
-                if (lng >= cache.W && lng <= cache.E && lat >= cache.S && lat <= cache.N) {
-                    // Cache hit
-                    var p = cache.proj,
-                        utm = GeographicLib.UTMUPS.Forward(lat, lng,
-                            p.semiaxis, 1/p.denflat, p.sfctrmer, p.longcm,
-                            p.feast, p.fnorth, p.zone)
-                    content += 'UTM: ' + utmfmt(utm.x) + ',' + utmfmt(utm.y) + '<br/>' + 
-                               '<a href="' + cache.link + '">' + cache.prod.title + '</a>'
-                    result = true
-                    break
+                          lng.toFixed(6) + '°,' + lat.toFixed(6) + '°<br/>'
+
+            for (var i = 0; i < usedmaps.length; i++) {
+                var m = usedmaps[i];
+                content += m.title + ' / 1:' + m.scale + ' / ';
+
+                // lat, lon, a, f, k0, lon0,
+                // feast, fnorth
+                var utm = GeographicLib.UTMUPS.Forward(lat, lng,
+                        m.a, m.f, m.k0, m.lon0,
+                        m.feast, m.fnorth, 16)
+                content += 'UTM ' + utmfmt(utm.x) + 'E,' + utmfmt(utm.y) + 'N / ';
+
+                for (var l = 0; l < m.links.length; l++) {
+                    var link = m.links[l];
+                    content += '<a href="' + link.href + '">' + link.name + '</a> (' + link.sizemb.toFixed(1) + 'MB) '
                 }
+                content += '<br/>';
             }
-            
-            if (!result)
-                content += 'Loading...'
+
             $('#map-info').html(content)
-            return result
         },
+
+        fits = function(lng, lat, cont) {
+            return lng >= cont.w &&
+                   lng <= cont.e &&
+                   lat >= cont.s &&
+                   lat <= cont.n;
+        }
         
-        zipqueue = [],
-        fetching = false,
-        nextzip = function() {
-            var next = zipqueue.pop()
-            if (next) next()
-            else {
-                fetching = false
-                console.log('Fetch done.')
+        maprecurse = function (lng, lat, node, usedmaps) {
+            if (!fits(lng, lat, node))
+                return;
+            for (var i = 0; i < node.maps.length; i++) {
+                if (fits(lng, lat, node.maps[i]))
+                    usedmaps.push(node.maps[i]);
             }
-        },
-        
-        utmhandler = function(xml, cache) {
-            var horiz = $(':root spref horizsys', xml)
-            cache.proj = {    zone:   parseInt($(':root planar gridsys utm utmzone          ', horiz).text()),
-                          sfctrmer: parseFloat($(':root planar gridsys utm transmer sfctrmer', horiz).text()),
-                            longcm: parseFloat($(':root planar gridsys utm transmer longcm  ', horiz).text()),
-                           latprjo: parseFloat($(':root planar gridsys utm transmer latprjo ', horiz).text()),
-                             feast: parseFloat($(':root planar gridsys utm transmer feast   ', horiz).text()),
-                            fnorth: parseFloat($(':root planar gridsys utm transmer fnorth  ', horiz).text()),
-                          semiaxis: parseFloat($(':root geodetic semiaxis                   ', horiz).text()),
-                           denflat: parseFloat($(':root geodetic denflat                    ', horiz).text()) }
-            mapcache[cache.prod.id] = cache 
-            if (setinfo())
-                zipqueue = []
-            nextzip()
-        },
-        
-        getdesc = function(cache) {
-            return cache.W.toFixed(2) + '_' + cache.E.toFixed(2) + '/' + 
-                   cache.S.toFixed(2) + '_' + cache.N.toFixed(2) + ' - ' +
-                   cache.prod.title
-        },
-        
-        server = 'http://localhost:8083',
-        fetchzip = function(prod, fi) {
-            return function() {
-                var coord = prod.geometry.coordinates[0],
-                    cache = { prod: prod,
-                              link: fi.link,
-                              W: 500, E: -500, S: 500, N: -500 },
-                    fetchlink = server + '/zipproxy/fgdc_en.xml/' + fi.link
-                for (var i in coord) {
-                    cache.W = Math.min(cache.W, coord[i][0])
-                    cache.E = Math.max(cache.E, coord[i][0])
-                    cache.S = Math.min(cache.S, coord[i][1])
-                    cache.N = Math.max(cache.N, coord[i][1])
-                }
-                console.log('Getting ' + getdesc(cache) + ' -> ' + fetchlink)
-                $.ajax(fetchlink,
-                        { success: function(data) { utmhandler(data, cache) },
-                          error: function(xhr, status, err) {
-                              console.log(status + ' - ' + err)
-                          }})
+            if (lng >= node.x) {
+                if (lat >= node.y && 'ne' in node)
+                    maprecurse(lng, lat, node.ne, usedmaps);
+                if (lat <= node.y && 'se' in node)
+                    maprecurse(lng, lat, node.se, usedmaps);
             }
-        },
-        
-        rxresults = function(lng, lat, data) {
-            for (var i in data.products) {
-                var prod = data.products[i],
-                    found = false
-                if (prod.datasetScale != 50000)
-                    continue
-                var cache = mapcache[prod.id]
-                if (cache) {
-                    console.log('Cached ' + getdesc(cache))
-                    continue
-                }
-                for (var f in prod.files) {
-                    var fi = prod.files[f]
-                    if (/*fi.type == 'TIFF' && */ fi.description.indexOf('Download file in ' > -1)) {
-                        console.log('Queueing ' + fi.link)
-                        zipqueue.push(fetchzip(prod, fi))
-                        found = true
-                        break
-                    }
-                }
-                if (!found)
-                    console.log('Warning: no matching files in product')
+            if (lng <= node.x) {
+                if (lat >= node.y && 'nw' in node)
+                    maprecurse(lng, lat, node.nw, usedmaps);
+                if (lat <= node.y && 'sw' in node)
+                    maprecurse(lng, lat, node.sw, usedmaps);
             }
-            nextzip()
-        },
+        }
         
         movemap = function(event, series) {
-            lng = event.latLng.lng()
-            lat = event.latLng.lat()
-            if (!setinfo() && !fetching) {
-                fetching = true
-                var lng0 = 0.5*Math.floor(lng/0.5) - 0.1,
-                    lng1 = lng0 + 0.2,
-                    lat0 = 0.25*Math.floor(lat/0.25) - 0.01,
-                    lat1 = lat0 + 0.02,
-                    url = server + '/proxy/http:/geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/-/AND/' +
-                          '(urn:iso:series)canmatrix-print-ready/(urn:iso:type)map?' +
-                          'alt=json&entry-type=full&max-results=9&' +
-                          'bbox=' + lng0.toFixed(1)+',' + lat0.toFixed(2)+',' +
-                                    lng1.toFixed(1)+',' + lat1.toFixed(2)
-                    console.log('Fetching ' + url)
-                    $.ajax(url,
-                           { success: function(data) { rxresults(lng, lat, data) },
-                             error: function(xhr, status, err) {
-                                 console.log(status + ' - ' + err)
-                             }})
-            }
+            var lng = event.latLng.lng(),
+                lat = event.latLng.lat(),
+                usedmaps = [];
+
+            maprecurse(lng, lat, db, usedmaps);
+            setinfo(lng, lat, usedmaps);
         },
         
         gm = google.maps,

@@ -27,19 +27,20 @@
         */
         public string title;
         public int scale;
+        public string zone = "";
         public double pw;
         public double pe;
         public double ps;
         public double pn;
-        public Dictionary<string, double> parms;
-        public List<MapLink> links;
+        public Dictionary<string, double> parms = new Dictionary<string,double>();
+        public List<MapLink> links = new List<MapLink>();
 
         public void DumpJson(TextWriter writer)
         {
             writer.Write('{');
 
-            writer.Write("w:{0},e:{1},s:{2},n:{3},scale:{4},title:\"{5}\",",
-                pw, pe, ps, pn, scale, title);
+            writer.Write("w:{0},e:{1},s:{2},n:{3},scale:{4},title:\"{5}\",zone:\"{6}\",",
+                pw, pe, ps, pn, scale, title, zone);
 
             writer.Write("lon0:{0},", parms["Longitude of natural origin"]);
             writer.Write("k0:{0},", parms["Scale factor at natural origin"]);
@@ -54,7 +55,7 @@
                 writer.Write('{');
                 writer.Write("name:\"{0}\",href:\"{1}\",sizemb:{2}",
                     link.name, link.href, link.sizemb);
-                writer.Write('}');
+                writer.Write("},");
             }
             writer.Write(']');
 
@@ -100,7 +101,7 @@
             return LoadEPSG(codespace, link, out childdoc);
         }
 
-        static void GetCRS(string codespace, string code, Dictionary<string, double> parmdict)
+        static void GetCRS(string codespace, string code, Map map)
         {
             XmlDocument proj;
             XmlNamespaceManager projns = LoadEPSG(codespace, "urn:ogc:def:crs:" + code, out proj);
@@ -120,7 +121,7 @@
                 XmlNamespaceManager parmns = LoadXlink(codespace, param, convns, "operationParameter", out parm);
                 string parmname = parm.DocumentElement.SelectSingleNode("//gml:name/text()", parmns).Value;
 
-                parmdict[parmname] = value;
+                map.parms[parmname] = value;
             }
 
             XmlDocument geocrs;
@@ -142,8 +143,8 @@
             }
             else f = double.Parse(fnode.Value);
 
-            parmdict["Semi-major axis"] = smaj;
-            parmdict["Flattening ratio"] = f;
+            map.parms["Semi-major axis"] = smaj;
+            map.parms["Flattening ratio"] = f;
         }
 
         static void Search(
@@ -176,13 +177,16 @@
 
             foreach (XmlNode entry in doc.DocumentElement.SelectNodes("atom:entry", nsman))
             {
-                XmlNode
-                    title = entry.SelectSingleNode("./atom:title/text()", nsman),
-                    bw = entry.SelectSingleNode(".//gmd:westBoundLongitude/gco:Decimal/text()", nsman),
-                    be = entry.SelectSingleNode(".//gmd:eastBoundLongitude/gco:Decimal/text()", nsman),
-                    bs = entry.SelectSingleNode(".//gmd:southBoundLatitude/gco:Decimal/text()", nsman),
-                    bn = entry.SelectSingleNode(".//gmd:northBoundLatitude/gco:Decimal/text()", nsman),
-                    scale = entry.SelectSingleNode(".//gmd:spatialResolution//gmd:denominator/gco:Integer/text()", nsman);
+                Map map = new Map()
+                {
+                    title = entry.SelectSingleNode("./atom:title/text()", nsman).Value,
+                    scale = int.Parse(entry.SelectSingleNode(".//gmd:spatialResolution//gmd:denominator/gco:Integer/text()", nsman).Value),
+                    pw = double.Parse(entry.SelectSingleNode(".//gmd:westBoundLongitude/gco:Decimal/text()", nsman).Value),
+                    pe = double.Parse(entry.SelectSingleNode(".//gmd:eastBoundLongitude/gco:Decimal/text()", nsman).Value),
+                    ps = double.Parse(entry.SelectSingleNode(".//gmd:southBoundLatitude/gco:Decimal/text()", nsman).Value),
+                    pn = double.Parse(entry.SelectSingleNode(".//gmd:northBoundLatitude/gco:Decimal/text()", nsman).Value)
+                };
+                tree.Add(map);
 
                 XmlNodeList refsystems = entry.SelectNodes(".//gmd:RS_Identifier", nsman);
                 Dictionary<string, double> parmdict = new Dictionary<string, double>();
@@ -191,7 +195,7 @@
                     XmlNode
                         codespace = refsystem.SelectSingleNode("./gmd:codeSpace/gco:CharacterString/text()", nsman),
                         code = refsystem.SelectSingleNode("./gmd:code/gco:CharacterString/text()", nsman);
-                    GetCRS(codespace.Value, code.Value, parmdict);
+                    GetCRS(codespace.Value, code.Value, map);
                 }
 
                 List<MapLink> links = new List<MapLink>();
@@ -206,30 +210,18 @@
 
                     string name = opts.SelectSingleNode(".//gmd:name/gco:CharacterString/text()", nsman).Value;
                     links.Add(new MapLink()
-                        {
-                            name = name,
-                            href = url,
-                            sizemb = sizemb
-                        });
+                    {
+                        name = name,
+                        href = url,
+                        sizemb = sizemb
+                    });
                 }
-
-                tree.Add(new Map()
-                {
-                    title = title.Value,
-                    scale = int.Parse(scale.Value),
-                    pw = double.Parse(bw.Value),
-                    pe = double.Parse(be.Value),
-                    ps = double.Parse(bs.Value),
-                    pn = double.Parse(bn.Value),
-                    parms = parmdict,
-                    links = links
-                });
             }
         }
 
         static void Main()
         {
-            Search(-90.1, -88.9, 47.9, 49.1);
+            Search(-92, -87, 48, 50);
             tree.JsonDump(Console.Out);
 
             /*
