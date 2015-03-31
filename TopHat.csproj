@@ -41,6 +41,8 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Map.cs" />
+    <Compile Include="Progress.cs" />
     <Compile Include="QuadTree.cs" />
     <Compile Include="TopHat.cs" />
   </ItemGroup>

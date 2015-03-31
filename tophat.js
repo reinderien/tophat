@@ -705,60 +705,22 @@ $(document).ready(function() {
 
 
 
-    var db = {w:-94,e:-86,s:47.75,n:51.75,x:-90,y:49.75,maps:[{w:-90,e:-88,s:49,n:50,scale:250000,title:"CanMatrix - Print Ready - 052H - Nipigon, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/h/canmatrix2_052h_pdf.zip",sizemb:11.921742},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/h/canmatrix2_052h_tif.zip",sizemb:10.294106},]},{w:-92,e:-90,s:49,n:50,scale:
-    250000,title:"CanMatrix - Print Ready - 052G - Ignace, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/g/canmatrix2_052g_pdf.zip",sizemb:
-    21.045016},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/g/canmatrix2_052g_tif.zip",sizemb:18.473459},]},],sw:{w:-94,e:-90,s:47.75,n:49.75,x:-92,y:48.75,maps:[{w:-92,e:-90,s:48,n:49,scale:250000,title:
-    "CanMatrix - Print Ready -052B - Quetico, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/b/canmatrix2_052b_pdf.zip",sizemb:19.504585},{name:
-    "TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/b/canmatrix2_052b_tif.zip",sizemb:18.509969},]},],se:{w:-92,e:-90,s:47.75,n:48.75,x:-91,y:48.25,maps:[],se:{w:-91,e:-90,s:47.75,n:48.25,x:-90.5,y:48,maps:[],ne:{w:-90.5,e:-90,s:48,
-    n:48.25,x:-90.25,y:48.125,maps:[{w:-90.5,e:-90,s:48,n:48.25,scale:50000,title:"CanMatrix - Print Ready - 052B01 - Arrow lake, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b01_pdf.zip",sizemb:21.506553},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b01_tif.zip",sizemb:20.738256},]},],}},ne:{w:-91,e:-90,
-    s:48.25,n:48.75,x:-90.5,y:48.5,maps:[],se:{w:-90.5,e:-90,s:48.25,n:48.5,x:-90.25,y:48.375,maps:[{w:-90.5,e:-90,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052B08 - Marks lake, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378137,
-    f:298.257222101,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b08_pdf.zip",sizemb:13.996696},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b08_tif.zip",
-    sizemb:12.031986},]},],},ne:{w:-90.5,e:-90,s:48.5,n:48.75,x:-90.25,y:48.625,maps:[{w:-90.5,e:-90,s:48.5,n:48.75,scale:50000,title:"CanMatrix - PrintReady - 052B09 - Shebandowan, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,
-    f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b09_pdf.zip",sizemb:23.088194},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b09_tif.zip",
-    sizemb:23.230966},]},],}}},ne:{w:-92,e:-90,s:48.75,n:49.75,x:-91,y:49.25,maps:[],se:{w:-91,e:-90,s:48.75,n:49.25,x:-90.5,y:49,maps:[],se:{w:-90.5,e:-90,s:48.75,n:49,x:-90.25,y:48.875,maps:[{w:-90.5,e:-90,s:48.75,n:49,scale:50000,title:
-    "CanMatrix - Print Ready - 052B16 - Savanne, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/b/canmatrix2_052b16_pdf.zip",sizemb:13.922054},
-    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/b/canmatrix2_052b16_tif.zip",sizemb:12.535679},]},],},ne:{w:-90.5,e:-90,s:49,n:49.25,x:-90.25,y:49.125,maps:[{w:-90.5,e:-90,s:49,n:49.25,scale:50000,title:
-    "CanMatrix - Print Ready - 052G01 - Upsala, Ontario",lon0:-93,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/g/canmatrix2_052g01_pdf.zip",sizemb:11.067636},
-    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/g/canmatrix2_052g01_tif.zip",sizemb:9.092106},]},],}},}},se:{w:-90,e:-86,s:47.75,n:49.75,x:-88,y:48.75,maps:[{w:-90,e:-88,s:48,n:49,scale:250000,
-    title:"CanMatrix - Print Ready - 052A - Thunder bay, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_pdf/052/a/canmatrix2_052a_pdf.zip",sizemb:12.965186},
-    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/250k_tif/052/a/canmatrix2_052a_tif.zip",sizemb:11.921257},]},],sw:{w:-90,e:-88,s:47.75,n:48.75,x:-89,y:48.25,maps:[],sw:{w:-90,e:-89,s:47.75,n:48.25,x:-89.5,y:48,maps:[],nw:{w:-90,e:-89.5,s:48,
-    n:48.25,x:-89.75,y:48.125,maps:[{w:-90,e:-89.5,s:48,n:48.25,scale:50000,title:"CanMatrix - Print Ready - 052A04 - Pigeon river, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a04_pdf.zip",sizemb:14.555276},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a04_tif.zip",sizemb:11.828886},]},],},ne:{w:-89.5,e:-89,s:48,
-    n:48.25,x:-89.25,y:48.125,maps:[{w:-89.5,e:-89,s:48,n:48.25,scale:50000,title:"CanMatrix - Print Ready - 052A03 - Jarvis river, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a03_pdf.zip",sizemb:9.790411},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a03_tif.zip",sizemb:8.047039},]},],}},nw:{w:-90,e:-89,s:48.25,
-    n:48.75,x:-89.5,y:48.5,maps:[],sw:{w:-90,e:-89.5,s:48.25,n:48.5,x:-89.75,y:48.375,maps:[{w:-90,e:-89.5,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052A05 - Kakabeka falls, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,
-    f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a05_pdf.zip",sizemb:19.97129},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a05_tif.zip",
-    sizemb:19.171035},]},],},se:{w:-89.5,e:-89,s:48.25,n:48.5,x:-89.25,y:48.375,maps:[{w:-89.5,e:-89,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052A06 - Thunder bay, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378137,f:298.257222101,
-    links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a06_pdf.zip",sizemb:11.368634},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a06_tif.zip",sizemb:9.743339},]},],},
-    nw:{w:-90,e:-89.5,s:48.5,n:48.75,x:-89.75,y:48.625,maps:[{w:-90,e:-89.5,s:48.5,n:48.75,scale:50000,title:"CanMatrix - Print Ready - 052A12 - Sunshine, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",
-    href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a12_pdf.zip",sizemb:21.27199},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a12_tif.zip",sizemb:20.880413},]},],},ne:{w:-89.5,e:-89,
-    s:48.5,n:48.75,x:-89.25,y:48.625,maps:[{w:-89.5,e:-89,s:48.5,n:48.75,scale:50000,title:"CanMatrix - Print Ready - 052A11 - Onion lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a11_pdf.zip",sizemb:19.824705},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a11_tif.zip",sizemb:17.350397},]},],}},ne:{w:-89,e:-88,
-    s:48.25,n:48.75,x:-88.5,y:48.5,maps:[],sw:{w:-89,e:-88.5,s:48.25,n:48.5,x:-88.75,y:48.375,maps:[{w:-89,e:-88.5,s:48.25,n:48.5,scale:50000,title:"CanMatrix - Print Ready - 052A07 - Thunder cape, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,
-    f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a07_pdf.zip",sizemb:11.709188},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a07_tif.zip",
-    sizemb:11.301776},]},],},nw:{w:-89,e:-88.5,s:48.5,n:48.75,x:-88.75,y:48.625,maps:[{w:-89,e:-88.5,s:48.5,n:48.75,scale:50000,title:"CanMatrix - Print Ready - 052A10 - Loon, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,
-    links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a10_pdf.zip",sizemb:17.058366},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a10_tif.zip",
-    sizemb:16.140093},]},],},}},nw:{w:-90,e:-88,s:48.75,n:49.75,x:-89,y:49.25,maps:[],sw:{w:-90,e:-89,s:48.75,n:49.25,x:-89.5,y:49,maps:[],sw:{w:-90,e:-89.5,s:48.75,n:49,x:-89.75,y:48.875,maps:[{w:-90,e:-89.5,s:48.75,n:49,scale:50000,title:
-    "CanMatrix - Print Ready - 052A13 - Raith, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a13_pdf.zip",sizemb:16.204415},
-    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a13_tif.zip",sizemb:14.682926},]},],},se:{w:-89.5,e:-89,s:48.75,n:49,x:-89.25,y:48.875,maps:[{w:-89.5,e:-89,s:48.75,n:49,scale:50000,title:
-    "CanMatrix - Print Ready - 052A14 - East bay, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a14_pdf.zip",sizemb:12.913035},
-    {name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a14_tif.zip",sizemb:10.861987},]},],},nw:{w:-90,e:-89.5,s:49,n:49.25,x:-89.75,y:49.125,maps:[{w:-90,e:-89.5,s:49,n:49.25,scale:50000,title:
-    "CanMatrix - Print Ready - 052H04 - Lac des iles, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/h/canmatrix2_052h04_pdf.zip",sizemb:
-    13.303807},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/h/canmatrix2_052h04_tif.zip",sizemb:11.407501},]},],},ne:{w:-89.5,e:-89,s:49,n:49.25,x:-89.25,y:49.125,maps:[{w:-89.5,e:-89,s:49,n:49.25,scale:50000,title:
-    "CanMatrix - Print Ready - 052H03 - Eaglehead lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/h/canmatrix2_052h03_pdf.zip",
-    sizemb:15.77037},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/h/canmatrix2_052h03_tif.zip",sizemb:13.840294},]},],}},se:{w:-89,e:-88,s:48.75,n:49.25,x:-88.5,y:49,maps:[],sw:{w:-89,e:-88.5,s:48.75,n:49,x:-88.75,y:48.875,maps:
-    [{w:-89,e:-88.5,s:48.75,n:49,scale:50000,title:"CanMatrix - Print Ready - 052A15 - Greenwich lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/a/canmatrix2_052a15_pdf.zip",sizemb:13.992883},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/a/canmatrix2_052a15_tif.zip",sizemb:12.072877},]},],},nw:{w:-89,e:-88.5,s:49,
-    n:49.25,x:-88.75,y:49.125,maps:[{w:-89,e:-88.5,s:49,n:49.25,scale:50000,title:"CanMatrix - Print Ready - 052H02 - Shillabeer lake, Ontario",lon0:-87,k0:0.9996,feast:500000,fnorth:0,a:6378206.4,f:294.978698213898,links:[{name:"PDF",href:
-    "http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_pdf/052/h/canmatrix2_052h02_pdf.zip",sizemb:15.248446},{name:"TIFF",href:"http://ftp2.cits.rncan.gc.ca/pub/canmatrix2/50k_tif/052/h/canmatrix2_052h02_tif.zip",sizemb:13.481669},]},],},},},},}
-
-
-
-        utmfmt = function (x) {
+    var utmfmt = function (x) {
             return '(' + Math.floor(x / 1e5) + ')' +
                    (1e9 + Math.floor(x) + '').slice(-5)
+        },
+
+        zoneFromCoords = function (xg, yg, xu, yu, mgrsNew) {
+            var mgrsLetters = "ABCDEFGHJKLMNPQRSTUVWXYZ",
+                zoneNo = Math.floor((xg + 180) / 6) + 1,
+                zoneLet = mgrsLetters[Math.floor((yg + 88) / 8) + 1],
+                set = (zoneNo - 1) % 6,
+                si = Math.floor(xu / 1e5) - 1,
+                i100k = mgrsLetters[(8 * set + si) % 24],
+                joff = ((set & 1) ? 5 : 0) + (mgrsNew ? 0 : 10),
+                ji = Math.floor(yu / 1e5) + joff,
+                j100k = mgrsLetters[ji % 20];
+            return zoneNo +zoneLet + ' ' +i100k +j100k;
         },
     
         setinfo = function(lng, lat, usedmaps) {
@@ -774,7 +736,8 @@ $(document).ready(function() {
                 var utm = GeographicLib.UTMUPS.Forward(lat, lng,
                         m.a, m.f, m.k0, m.lon0,
                         m.feast, m.fnorth, 16)
-                content += 'UTM ' + utmfmt(utm.x) + 'E,' + utmfmt(utm.y) + 'N / ';
+                content += 'UTM ' + zoneFromCoords(lng, lat, utm.x, utm.y, m.mgrsNew) + ' ' +
+                    utmfmt(utm.x) + 'E,' +utmfmt(utm.y) + 'N / ';
 
                 for (var l = 0; l < m.links.length; l++) {
                     var link = m.links[l];

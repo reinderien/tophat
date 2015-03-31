@@ -6,66 +6,11 @@
     using System.Net;
     using System.Xml;
 
-    class MapLink
-    {
-        public string name, href;
-        public double sizemb;
-    }
-
-    class Map
-    {
-        /*
-        Latitude of natural origin, 0  	       -> /
-        Longitude of natural origin, -93  	   -> lon0
-        Scale factor at natural origin, 0.9996 -> k0
-        False easting, 500000  	               -> feast
-        False northing, 0  	                   -> fnorth
-        Semi-major axis, 6378206.4  	       -> a
-        Flattening ratio, 294.978698213898     -> f
-             
-        There is not a constant scale or cnostant w-e n-s distances. Things overlap.
-        */
-        public string title;
-        public int scale;
-        public string zone = "";
-        public double pw;
-        public double pe;
-        public double ps;
-        public double pn;
-        public Dictionary<string, double> parms = new Dictionary<string,double>();
-        public List<MapLink> links = new List<MapLink>();
-
-        public void DumpJson(TextWriter writer)
-        {
-            writer.Write('{');
-
-            writer.Write("w:{0},e:{1},s:{2},n:{3},scale:{4},title:\"{5}\",zone:\"{6}\",",
-                pw, pe, ps, pn, scale, title, zone);
-
-            writer.Write("lon0:{0},", parms["Longitude of natural origin"]);
-            writer.Write("k0:{0},", parms["Scale factor at natural origin"]);
-            writer.Write("feast:{0},", parms["False easting"]);
-            writer.Write("fnorth:{0},", parms["False northing"]);
-            writer.Write("a:{0},", parms["Semi-major axis"]);
-            writer.Write("f:{0},", parms["Flattening ratio"]);
-
-            writer.Write("links:[");
-            foreach (MapLink link in links)
-            {
-                writer.Write('{');
-                writer.Write("name:\"{0}\",href:\"{1}\",sizemb:{2}",
-                    link.name, link.href, link.sizemb);
-                writer.Write("},");
-            }
-            writer.Write(']');
-
-            writer.Write('}');
-        }
-    }
-
     class TopHat
     {
         static Dictionary<Uri, string> HTTPCache = new Dictionary<Uri, string>();
+
+        static HashSet<string> mapNames = new HashSet<string>();
 
         static QuadTree tree = new QuadTree();
 
@@ -110,6 +55,17 @@
             if (projroot == null)
                 return;
 
+            string projName = projroot.SelectSingleNode("gml:name/text()", projns).Value;
+
+            if (projName.Contains("NAD83"))
+                map.mgrsNew = true;
+            else
+            {
+                map.mgrsNew = false;
+                if (!projName.Contains("NAD27"))
+                    Console.Out.WriteLine("Warning: unknown projection {0}", projName);
+            }
+
             XmlDocument conv;
             XmlNamespaceManager convns = LoadXlink(codespace, projroot, projns, "conversion", out conv);
 
@@ -153,82 +109,118 @@
             double ps,
             double pn)
         {
+            Progress prog = new Progress();
+
+            string uriBase = "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst";
             // http://geogratis.gc.ca/site/eng/api/documentation/sguide
             Uri uri = new Uri(string.Format(
-                "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/-/AND/" +
+                uriBase + "/-/AND/" +
                 "(urn:iso:series)canmatrix-print-ready/(urn:iso:type)map?" +
-                "alt=xml&entry-type=full&" +
+                "alt=xml&entry-type=full&sort-field=spatial&" +
                 "bbox={0},{1},{2},{3}", pw, ps, pe, pn));
-            HttpWebRequest req = HttpWebRequest.CreateHttp(uri);
-            XmlDocument doc = new XmlDocument();
-            using (WebResponse resp = req.GetResponse())
-                doc.Load(resp.GetResponseStream());
 
+            int entriesSoFar = 0;
+            int? entriesTotal = null;
 
-            XmlNamespaceManager nsman = new XmlNamespaceManager(doc.NameTable);
-            nsman.AddNamespace("atom", "http://www.w3.org/2005/Atom");
-            nsman.AddNamespace("as", "http://atomserver.org/namespaces/1.0/");
-            nsman.AddNamespace("base", "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/");
-            nsman.AddNamespace("gco", "http://www.isotc211.org/2005/gco");
-            nsman.AddNamespace("georss", "http://www.georss.org/georss");
-            nsman.AddNamespace("gmd", "http://www.isotc211.org/2005/gmd");
-            nsman.AddNamespace("gml", "http://www.opengis.net/gml");
-            nsman.AddNamespace("os", "http://a9.com/-/spec/opensearch/1.1/");
-
-            foreach (XmlNode entry in doc.DocumentElement.SelectNodes("atom:entry", nsman))
+            for (int pagesSoFar = 0; ; pagesSoFar++)
             {
-                Map map = new Map()
+                if (entriesTotal.HasValue)
+                    prog.ShowTick(entriesSoFar, entriesTotal.Value);
+
+                HttpWebRequest req = HttpWebRequest.CreateHttp(uri);
+                req.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip,deflate");
+                XmlDocument doc = new XmlDocument();
+                using (WebResponse resp = req.GetResponse())
+                    doc.Load(resp.GetResponseStream());
+
+                XmlNamespaceManager nsman = new XmlNamespaceManager(doc.NameTable);
+                nsman.AddNamespace("atom", "http://www.w3.org/2005/Atom");
+                nsman.AddNamespace("as", "http://atomserver.org/namespaces/1.0/");
+                nsman.AddNamespace("base", "http://geogratis.gc.ca/api/en/nrcan-rncan/ess-sst/");
+                nsman.AddNamespace("gco", "http://www.isotc211.org/2005/gco");
+                nsman.AddNamespace("georss", "http://www.georss.org/georss");
+                nsman.AddNamespace("gmd", "http://www.isotc211.org/2005/gmd");
+                nsman.AddNamespace("gml", "http://www.opengis.net/gml");
+                nsman.AddNamespace("os", "http://a9.com/-/spec/opensearch/1.1/");
+
+                /*
+                  <os:totalResults>111</os:totalResults>
+                  <os:startIndex>0</os:startIndex>
+                  <os:itemsPerPage>3</os:itemsPerPage>
+                  */
+                XmlElement docroot = doc.DocumentElement;
+                entriesTotal = int.Parse(docroot.SelectSingleNode("os:totalResults/text()", nsman).Value);
+
+                foreach (XmlNode entry in doc.DocumentElement.SelectNodes("atom:entry", nsman))
                 {
-                    title = entry.SelectSingleNode("./atom:title/text()", nsman).Value,
-                    scale = int.Parse(entry.SelectSingleNode(".//gmd:spatialResolution//gmd:denominator/gco:Integer/text()", nsman).Value),
-                    pw = double.Parse(entry.SelectSingleNode(".//gmd:westBoundLongitude/gco:Decimal/text()", nsman).Value),
-                    pe = double.Parse(entry.SelectSingleNode(".//gmd:eastBoundLongitude/gco:Decimal/text()", nsman).Value),
-                    ps = double.Parse(entry.SelectSingleNode(".//gmd:southBoundLatitude/gco:Decimal/text()", nsman).Value),
-                    pn = double.Parse(entry.SelectSingleNode(".//gmd:northBoundLatitude/gco:Decimal/text()", nsman).Value)
-                };
-                tree.Add(map);
+                    prog.ShowTick(entriesSoFar, entriesTotal.Value);
 
-                XmlNodeList refsystems = entry.SelectNodes(".//gmd:RS_Identifier", nsman);
-                Dictionary<string, double> parmdict = new Dictionary<string, double>();
-                foreach (XmlNode refsystem in refsystems)
-                {
-                    XmlNode
-                        codespace = refsystem.SelectSingleNode("./gmd:codeSpace/gco:CharacterString/text()", nsman),
-                        code = refsystem.SelectSingleNode("./gmd:code/gco:CharacterString/text()", nsman);
-                    GetCRS(codespace.Value, code.Value, map);
-                }
-
-                List<MapLink> links = new List<MapLink>();
-                foreach (XmlNode opts in entry.SelectNodes(
-                    ".//gmd:MD_DigitalTransferOptions", nsman))
-                {
-                    string url = opts.SelectSingleNode(".//gmd:URL/text()", nsman).Value;
-                    if (!url.StartsWith("http")) continue;
-
-                    double sizemb = double.Parse(opts.SelectSingleNode("./gmd:transferSize/gco:Real/text()", nsman).Value);
-                    if (sizemb < 2) continue;
-
-                    string name = opts.SelectSingleNode(".//gmd:name/gco:CharacterString/text()", nsman).Value;
-                    links.Add(new MapLink()
+                    Map map = new Map()
                     {
-                        name = name,
-                        href = url,
-                        sizemb = sizemb
-                    });
+                        title = entry.SelectSingleNode("./atom:title/text()", nsman).Value,
+                        scale = int.Parse(entry.SelectSingleNode(".//gmd:spatialResolution//gmd:denominator/gco:Integer/text()", nsman).Value),
+                        pw = double.Parse(entry.SelectSingleNode(".//gmd:westBoundLongitude/gco:Decimal/text()", nsman).Value),
+                        pe = double.Parse(entry.SelectSingleNode(".//gmd:eastBoundLongitude/gco:Decimal/text()", nsman).Value),
+                        ps = double.Parse(entry.SelectSingleNode(".//gmd:southBoundLatitude/gco:Decimal/text()", nsman).Value),
+                        pn = double.Parse(entry.SelectSingleNode(".//gmd:northBoundLatitude/gco:Decimal/text()", nsman).Value)
+                    };
+                    if (mapNames.Contains(map.title))
+                    {
+                        Console.WriteLine("\nMap '{0}' already loaded", map.title);
+                        entriesSoFar++;
+                        continue;
+                    }
+                    mapNames.Add(map.title);
+                    tree.Add(map);
+
+                    XmlNodeList refsystems = entry.SelectNodes(".//gmd:RS_Identifier", nsman);
+                    Dictionary<string, double> parmdict = new Dictionary<string, double>();
+                    foreach (XmlNode refsystem in refsystems)
+                    {
+                        XmlNode
+                            codespace = refsystem.SelectSingleNode("./gmd:codeSpace/gco:CharacterString/text()", nsman),
+                            code = refsystem.SelectSingleNode("./gmd:code/gco:CharacterString/text()", nsman);
+                        GetCRS(codespace.Value, code.Value, map);
+                    }
+
+                    foreach (XmlNode opts in entry.SelectNodes(
+                        ".//gmd:MD_DigitalTransferOptions", nsman))
+                    {
+                        string url = opts.SelectSingleNode(".//gmd:URL/text()", nsman).Value;
+                        if (!url.StartsWith("http")) continue;
+
+                        double sizemb = double.Parse(opts.SelectSingleNode("./gmd:transferSize/gco:Real/text()", nsman).Value);
+                        if (sizemb < 2) continue;
+
+                        string name = opts.SelectSingleNode(".//gmd:name/gco:CharacterString/text()", nsman).Value;
+                        map.links.Add(new MapLink()
+                        {
+                            name = name,
+                            href = url,
+                            sizemb = sizemb
+                        });
+                    }
+
+                    entriesSoFar++;
                 }
+
+                // ./-/AND/(urn:iso:series)  ...
+                XmlNode nextAttr = docroot.SelectSingleNode("atom:link[@rel = 'next']/@href", nsman);
+                if (nextAttr == null) break;
+                uri = new Uri(uriBase + nextAttr.Value.TrimStart(new char[] { '.' }));
             }
         }
 
         static void Main()
         {
-            Search(-92, -87, 48, 50);
-            tree.JsonDump(Console.Out);
+            Search(-95, -85, 45, 55);
+            Console.Out.WriteLine();
 
-            /*
-            Form an index tree for geographical coordinates
-               Split latitude
-               Then split longitude
-            */
+            using (StreamWriter writer = new StreamWriter("db.js"))
+            {
+                writer.WriteLine("var db = ");
+                tree.JsonDump(writer);
+            }
         }
     }
 }
