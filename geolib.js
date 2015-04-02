@@ -219,7 +219,7 @@ var GeographicLib = {};
      * @param[in] k0 central scale factor.
      **********************************************************************/
 
-    TransverseMercator = function(a, f, _k0) {
+    TransverseMercator = function(_a, f, _k0) {
     
         var // #define GEOGRAPHICLIB_PRECISION 2 (double)
             // #define GEOGRAPHICLIB_TRANSVERSEMERCATOR_ORDER 6
@@ -509,7 +509,7 @@ var GeographicLib = {};
      *   flattening to 1/\e f.
      * @param[in] k0 central scale factor.
      **********************************************************************/
-    PolarStereographic = function(a, f, _k0) {
+    PolarStereographic = function(_a, f, _k0) {
         var        
             // Return e * atanh(e * x) for f >= 0, else return
             // - sqrt(-e2) * atan( sqrt(-e2) * x) for f < 0
