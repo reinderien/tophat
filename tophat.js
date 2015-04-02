@@ -1,4 +1,4 @@
-﻿$(document).ready(function() {
+$(document).ready(function() {
     // Format a UTM coordinate component for display
     var utmfmt = function(x) {
             return '(' + Math.floor(x / 1e5) + ')' +

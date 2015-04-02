@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Google Maps + Canadian Topography</title>
+<style type="text/css">
+html, body, div { margin: 0; padding: 0 }
+html, body { height: 100% }
+#map-canvas { height: calc(100% - 60px) }
+#map-info { height: 60px }
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- You need to add a Google API key. -->
+<script src="http://maps.googleapis.com/maps/api/js?key=xxxxxxxxxxxx-xxxxxxxxxxxxxxxxx-xxxxxxxx"></script>
+<script src="db.js"></script>
+<script src="geolib.js"></script>
+<script src="tophat.js"></script>
+</head>
+<body>
+<div id="map-canvas"></div>
+<div id="map-info"></div>
+</body>
+</html>

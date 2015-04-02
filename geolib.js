@@ -1,4 +1,4 @@
-﻿/*
+/*
 Adapted from GeographicLib:
 http://sourceforge.net/projects/geographiclib/
 */
