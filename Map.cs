@@ -12,7 +12,7 @@
     class Map
     {
         /*
-        Latitude of natural origin, 0  	       -> /
+        Latitude of natural origin, 0  	       -> [unused]
         Longitude of natural origin, -93  	   -> lon0
         Scale factor at natural origin, 0.9996 -> k0
         False easting, 500000  	               -> feast
@@ -20,7 +20,7 @@
         Semi-major axis, 6378206.4  	       -> a
         Flattening ratio, 294.978698213898     -> f
              
-        There is not a constant scale or cnostant w-e n-s distances. Things overlap.
+        There is not a constant scale nor constant w-e n-s distances. Things overlap.
         */
         public string title;
         public int scale;

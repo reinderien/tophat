@@ -150,8 +150,8 @@
 
         /*
          * Maps are not only added at the leaf level
-         * Multiple maps can be on a leaf
-         * A map cannot be on multiple leaves
+         * Multiple maps can be on a node
+         * A map cannot be on multiple nodes
          * */
 
         public void Add(Map map)

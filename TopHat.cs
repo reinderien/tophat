@@ -213,6 +213,7 @@
 
         static void Main()
         {
+            // Northern Ontario
             Search(-95, -85, 45, 55);
             Console.Out.WriteLine();
 
